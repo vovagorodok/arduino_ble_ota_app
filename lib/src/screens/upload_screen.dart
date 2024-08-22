@@ -4,22 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:expandable/expandable.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:ble_device_provider/ble_connector.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/core/software.dart';
 import 'package:ble_ota_app/src/utils/string_forms.dart';
 import 'package:ble_ota_app/src/ota/uploader.dart';
 import 'package:ble_ota_app/src/ota/info_reader.dart';
-import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 import 'package:ble_ota_app/src/screens/pin_screen.dart';
 import 'package:ble_ota_app/src/screens/info_screen.dart';
+import 'package:ble_ota_app/src/ble/ble.dart';
+import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 
 class UploadScreen extends StatefulWidget {
   UploadScreen({required this.deviceId, required this.deviceName, super.key})
       : uploader = Uploader(deviceId: deviceId),
         infoReader = InfoReader(deviceId: deviceId),
-        bleConnector = BleConnector(deviceId: deviceId);
+        bleConnector = BleConnector(ble, deviceId: deviceId);
 
   final String deviceId;
   final String deviceName;
@@ -46,7 +48,7 @@ class UploadScreenState extends State<UploadScreen> {
   void _onConnectionStateChanged(BleConnectionState state) {
     setState(() {
       if (state == BleConnectionState.disconnected) {
-        bleConnector.findAndConnect();
+        bleConnector.findAndConnect(serviceUuid);
       } else if (state == BleConnectionState.connected) {
         if (!skipInfoReading.value) {
           infoReader.read(manufacturesDictUrl.value);
@@ -66,7 +68,7 @@ class UploadScreenState extends State<UploadScreen> {
         WakelockPlus.disable();
       } else if (state.status == WorkStatus.error) {
         WakelockPlus.disable();
-      }
+      }   
     });
   }
 

@@ -17,13 +17,16 @@ dependencies:
   http: ^1.2.1
   wakelock_plus: ^1.2.5
   expandable: ^5.0.1
+  jumping_dot: ^0.0.6
   meta: ^1.12.0
   flutter_settings_screens: ^0.3.4
-  jumping_dot: ^0.0.6
   easy_localization: ^3.0.7
   flutter_markdown: ^0.7.2
   flutter_pin_code_fields: ^2.2.0
   url_launcher: ^6.3.0
+  ble_device_provider:
+    git:
+      url: https://github.com/dkwach/ble_device_provider 
 
 dev_dependencies:
   flutter_test:
